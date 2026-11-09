@@ -445,6 +445,38 @@
   .step-list li.done { opacity: 0.5; text-decoration: line-through; }
   .step-list li.done .step-num { background: var(--success); }
 
+  /* Assignments grouped by week / time slot */
+  .assign-week { margin-bottom: 1.25rem; }
+  .assign-week-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 0.5rem;
+  }
+  .assign-week-header h3 {
+    font-family: var(--font-display);
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0;
+  }
+  .assign-week-header .meta {
+    font-size: 0.75rem;
+    color: var(--fg-muted);
+  }
+  .data-table tbody tr.slot-row td {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 0.4rem 0.6rem;
+  }
+  .data-table tbody tr.match-row td { background: var(--surface); }
+  .data-table.assign-table { margin-bottom: 0; }
+
   .footer {
     text-align: center;
     padding: 1.25rem 0 2rem;
@@ -588,12 +620,18 @@
 </div>
 
 <h2 class="section-title">Assignment Preview</h2>
-<div style="overflow-x:auto">
-<table class="data-table">
-  <thead><tr><th>#</th><th>Date</th><th>Time</th><th>Court</th><th>Team A</th><th>Team B</th><th>Umpire 1</th><th>Umpire 2</th></tr></thead>
-  <tbody id="assign-body"></tbody>
-</table>
+
+<div class="week-filter" id="assign-filter">
+  <button class="week-btn active" onclick="filterAssign('all',this)">All</button>
+  <button class="week-btn" onclick="filterAssign('Week 1',this)">Week 1</button>
+  <button class="week-btn" onclick="filterAssign('Week 2',this)">Week 2</button>
+  <button class="week-btn" onclick="filterAssign('Week 3',this)">Week 3</button>
+  <button class="week-btn" onclick="filterAssign('Week 4',this)">Week 4</button>
+  <button class="week-btn" onclick="filterAssign('Week 5',this)">Week 5</button>
+  <button class="week-btn" onclick="filterAssign('Week 6',this)">Week 6</button>
 </div>
+
+<div id="assign-container"></div>
 </div>
 
 <div class="footer">
@@ -728,20 +766,62 @@ function filterSlots(week, btn) {
   renderSlots(week);
 }
 
-function renderAssignPreview() {
-  const tbody = document.getElementById('assign-body');
-  tbody.innerHTML = '';
+function renderAssignPreview(filter) {
+  const container = document.getElementById('assign-container');
+  container.innerHTML = '';
+
+  // Group matches: week -> time slot (date + time) -> matches, keeping schedule order
+  const weeks = {};
   matches.forEach(m => {
-    const courtClass = m[8] === 'Court 1' ? 'c1' : 'c2';
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${m[0]}</td><td style="white-space:nowrap">${m[6]}</td><td style="white-space:nowrap;font-variant-numeric:tabular-nums">${m[7]}</td><td><span class="court-tag ${courtClass}">${m[8]}</span></td><td style="font-weight:600">${m[4]}</td><td style="font-weight:600">${m[5]}</td><td style="color:var(--fg-muted)">TBD</td><td style="color:var(--fg-muted)">TBD</td>`;
-    tbody.appendChild(tr);
+    const week = m[1];
+    if (filter !== 'all' && week !== filter) return;
+    if (!weeks[week]) weeks[week] = { slots: {}, dates: [], count: 0 };
+    const w = weeks[week];
+    const slotKey = m[6] + '|' + m[7];
+    if (!w.slots[slotKey]) w.slots[slotKey] = { date: m[6], time: m[7], matches: [] };
+    w.slots[slotKey].matches.push(m);
+    if (!w.dates.includes(m[6])) w.dates.push(m[6]);
+    w.count++;
   });
+
+  Object.entries(weeks).forEach(([week, w]) => {
+    const slots = Object.values(w.slots);
+    const section = document.createElement('div');
+    section.className = 'assign-week';
+
+    let rows = '';
+    slots.forEach(slot => {
+      rows += `<tr class="slot-row"><td colspan="6">${slot.date} &middot; ${slot.time}</td></tr>`;
+      slot.matches.forEach(m => {
+        const courtClass = m[8] === 'Court 1' ? 'c1' : 'c2';
+        rows += `<tr class="match-row"><td>${m[0]}</td><td><span class="court-tag ${courtClass}">${m[8]}</span></td><td style="font-weight:600">${m[4]}</td><td style="font-weight:600">${m[5]}</td><td style="color:var(--fg-muted)">TBD</td><td style="color:var(--fg-muted)">TBD</td></tr>`;
+      });
+    });
+
+    section.innerHTML = `
+      <div class="assign-week-header">
+        <h3>${week}</h3>
+        <span class="meta">${w.dates.join(' &amp; ')} &middot; ${slots.length} time slot${slots.length === 1 ? '' : 's'} &middot; ${w.count} match${w.count === 1 ? '' : 'es'}</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table assign-table">
+          <thead><tr><th>#</th><th>Court</th><th>Team A</th><th>Team B</th><th>Umpire 1</th><th>Umpire 2</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+    container.appendChild(section);
+  });
+}
+
+function filterAssign(week, btn) {
+  document.querySelectorAll('#assign-filter .week-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAssignPreview(week);
 }
 
 renderSchedule('all');
 renderSlots('all');
-renderAssignPreview();
+renderAssignPreview('all');
 
 try {
   const saved = localStorage.getItem('cnl-tab');
