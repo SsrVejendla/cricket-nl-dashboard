@@ -309,7 +309,7 @@
     color: var(--fg);
   }
 
-  /* Week filter */
+  /* Day filter */
   .week-filter {
     display: flex;
     flex-wrap: wrap;
@@ -572,19 +572,11 @@
 <!-- ═══════════════ TAB 2: MATCH SCHEDULE ═══════════════ -->
 <div id="tab-schedule" class="tab-panel">
 
-<div class="week-filter" id="schedule-filter">
-  <button class="week-btn active" onclick="filterSchedule('all',this)">All</button>
-  <button class="week-btn" onclick="filterSchedule('Week 1',this)">Week 1</button>
-  <button class="week-btn" onclick="filterSchedule('Week 2',this)">Week 2</button>
-  <button class="week-btn" onclick="filterSchedule('Week 3',this)">Week 3</button>
-  <button class="week-btn" onclick="filterSchedule('Week 4',this)">Week 4</button>
-  <button class="week-btn" onclick="filterSchedule('Week 5',this)">Week 5</button>
-  <button class="week-btn" onclick="filterSchedule('Week 6',this)">Week 6</button>
-</div>
+<div class="week-filter" id="schedule-filter"></div>
 
 <div style="overflow-x:auto">
 <table class="data-table" id="schedule-table">
-  <thead><tr><th>#</th><th>Week</th><th>Stage</th><th>Group</th><th>Team A</th><th>Team B</th><th>Date</th><th>Time</th><th>Court</th></tr></thead>
+  <thead><tr><th>#</th><th>Stage</th><th>Group</th><th>Team A</th><th>Team B</th><th>Date</th><th>Time</th><th>Court</th></tr></thead>
   <tbody></tbody>
 </table>
 </div>
@@ -593,15 +585,7 @@
 <!-- ═══════════════ TAB 3: TIME SLOTS ═══════════════ -->
 <div id="tab-slots" class="tab-panel">
 
-<div class="week-filter" id="slots-filter">
-  <button class="week-btn active" onclick="filterSlots('all',this)">All</button>
-  <button class="week-btn" onclick="filterSlots('Week 1',this)">Week 1</button>
-  <button class="week-btn" onclick="filterSlots('Week 2',this)">Week 2</button>
-  <button class="week-btn" onclick="filterSlots('Week 3',this)">Week 3</button>
-  <button class="week-btn" onclick="filterSlots('Week 4',this)">Week 4</button>
-  <button class="week-btn" onclick="filterSlots('Week 5',this)">Week 5</button>
-  <button class="week-btn" onclick="filterSlots('Week 6',this)">Week 6</button>
-</div>
+<div class="week-filter" id="slots-filter"></div>
 
 <div id="slots-container"></div>
 </div>
@@ -621,15 +605,7 @@
 
 <h2 class="section-title">Assignment Preview</h2>
 
-<div class="week-filter" id="assign-filter">
-  <button class="week-btn active" onclick="filterAssign('all',this)">All</button>
-  <button class="week-btn" onclick="filterAssign('Week 1',this)">Week 1</button>
-  <button class="week-btn" onclick="filterAssign('Week 2',this)">Week 2</button>
-  <button class="week-btn" onclick="filterAssign('Week 3',this)">Week 3</button>
-  <button class="week-btn" onclick="filterAssign('Week 4',this)">Week 4</button>
-  <button class="week-btn" onclick="filterAssign('Week 5',this)">Week 5</button>
-  <button class="week-btn" onclick="filterAssign('Week 6',this)">Week 6</button>
-</div>
+<div class="week-filter" id="assign-filter"></div>
 
 <div id="assign-container"></div>
 </div>
@@ -713,20 +689,20 @@ function renderSchedule(filter) {
   const tbody = document.querySelector('#schedule-table tbody');
   tbody.innerHTML = '';
   matches.forEach(m => {
-    if (filter !== 'all' && m[1] !== filter) return;
+    if (filter !== 'all' && m[6] !== filter) return;
     const courtClass = m[8] === 'Court 1' ? 'c1' : 'c2';
     const isPlayoff = m[3] === 'Playoffs';
     const groupHtml = isPlayoff ? '<span class="group-tag" style="background:var(--warning-bg);color:var(--warning)">PO</span>' : `<span class="group-tag">${m[3].replace('Group ','')}</span>`;
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${m[0]}</td><td>${m[1]}</td><td>${m[2]}</td><td>${groupHtml}</td><td style="font-weight:600">${m[4]}</td><td style="font-weight:600">${m[5]}</td><td style="white-space:nowrap">${m[6]}</td><td style="white-space:nowrap;font-variant-numeric:tabular-nums">${m[7]}</td><td><span class="court-tag ${courtClass}">${m[8]}</span></td>`;
+    tr.innerHTML = `<td>${m[0]}</td><td>${m[2]}</td><td>${groupHtml}</td><td style="font-weight:600">${m[4]}</td><td style="font-weight:600">${m[5]}</td><td style="white-space:nowrap">${m[6]}</td><td style="white-space:nowrap;font-variant-numeric:tabular-nums">${m[7]}</td><td><span class="court-tag ${courtClass}">${m[8]}</span></td>`;
     tbody.appendChild(tr);
   });
 }
 
-function filterSchedule(week, btn) {
+function filterSchedule(day, btn) {
   document.querySelectorAll('#schedule-filter .week-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderSchedule(week);
+  renderSchedule(day);
 }
 
 function renderSlots(filter) {
@@ -734,14 +710,14 @@ function renderSlots(filter) {
   container.innerHTML = '';
   const grouped = {};
   matches.forEach(m => {
-    const key = m[6] + '|' + m[7] + '|' + m[1];
-    if (!grouped[key]) grouped[key] = { date: m[6], time: m[7], week: m[1], c1: null, c2: null };
+    const key = m[6] + '|' + m[7];
+    if (!grouped[key]) grouped[key] = { date: m[6], time: m[7], c1: null, c2: null };
     if (m[8] === 'Court 1') grouped[key].c1 = m;
     else grouped[key].c2 = m;
   });
 
   Object.values(grouped).forEach(slot => {
-    if (filter !== 'all' && slot.week !== filter) return;
+    if (filter !== 'all' && slot.date !== filter) return;
     const card = document.createElement('div');
     card.className = 'slot-card';
 
@@ -755,43 +731,41 @@ function renderSlots(filter) {
       c2Html = `<div class="slot-court c2"><div class="court-label">Court 2</div><span class="team-name">${slot.c2[4]}</span> <span class="vs">vs</span> <span class="team-name">${slot.c2[5]}</span></div>`;
     }
 
-    card.innerHTML = `<div class="slot-header"><span>${slot.week}</span><span class="time-label">${slot.date} &middot; ${slot.time}</span></div><div class="slot-courts">${c1Html}${c2Html}</div>`;
+    card.innerHTML = `<div class="slot-header"><span>${slot.date}</span><span class="time-label">${slot.time}</span></div><div class="slot-courts">${c1Html}${c2Html}</div>`;
     container.appendChild(card);
   });
 }
 
-function filterSlots(week, btn) {
+function filterSlots(day, btn) {
   document.querySelectorAll('#slots-filter .week-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderSlots(week);
+  renderSlots(day);
 }
 
 function renderAssignPreview(filter) {
   const container = document.getElementById('assign-container');
   container.innerHTML = '';
 
-  // Group matches: week -> time slot (date + time) -> matches, keeping schedule order
-  const weeks = {};
+  // Group matches: day -> time slot -> matches, keeping schedule order
+  const days = {};
   matches.forEach(m => {
-    const week = m[1];
-    if (filter !== 'all' && week !== filter) return;
-    if (!weeks[week]) weeks[week] = { slots: {}, dates: [], count: 0 };
-    const w = weeks[week];
-    const slotKey = m[6] + '|' + m[7];
-    if (!w.slots[slotKey]) w.slots[slotKey] = { date: m[6], time: m[7], matches: [] };
-    w.slots[slotKey].matches.push(m);
-    if (!w.dates.includes(m[6])) w.dates.push(m[6]);
-    w.count++;
+    const day = m[6];
+    if (filter !== 'all' && day !== filter) return;
+    if (!days[day]) days[day] = { slots: {}, count: 0 };
+    const d = days[day];
+    if (!d.slots[m[7]]) d.slots[m[7]] = { time: m[7], matches: [] };
+    d.slots[m[7]].matches.push(m);
+    d.count++;
   });
 
-  Object.entries(weeks).forEach(([week, w]) => {
-    const slots = Object.values(w.slots);
+  Object.entries(days).forEach(([day, d]) => {
+    const slots = Object.values(d.slots);
     const section = document.createElement('div');
     section.className = 'assign-week';
 
     let rows = '';
     slots.forEach(slot => {
-      rows += `<tr class="slot-row"><td colspan="6">${slot.date} &middot; ${slot.time}</td></tr>`;
+      rows += `<tr class="slot-row"><td colspan="6">${slot.time}</td></tr>`;
       slot.matches.forEach(m => {
         const courtClass = m[8] === 'Court 1' ? 'c1' : 'c2';
         rows += `<tr class="match-row"><td>${m[0]}</td><td><span class="court-tag ${courtClass}">${m[8]}</span></td><td style="font-weight:600">${m[4]}</td><td style="font-weight:600">${m[5]}</td><td style="color:var(--fg-muted)">TBD</td><td style="color:var(--fg-muted)">TBD</td></tr>`;
@@ -800,8 +774,8 @@ function renderAssignPreview(filter) {
 
     section.innerHTML = `
       <div class="assign-week-header">
-        <h3>${week}</h3>
-        <span class="meta">${w.dates.join(' &amp; ')} &middot; ${slots.length} time slot${slots.length === 1 ? '' : 's'} &middot; ${w.count} match${w.count === 1 ? '' : 'es'}</span>
+        <h3>${day}</h3>
+        <span class="meta">${slots.length} time slot${slots.length === 1 ? '' : 's'} &middot; ${d.count} match${d.count === 1 ? '' : 'es'}</span>
       </div>
       <div style="overflow-x:auto">
         <table class="data-table assign-table">
@@ -813,11 +787,29 @@ function renderAssignPreview(filter) {
   });
 }
 
-function filterAssign(week, btn) {
+function filterAssign(day, btn) {
   document.querySelectorAll('#assign-filter .week-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderAssignPreview(week);
+  renderAssignPreview(day);
 }
+
+// Build day filter buttons (All + one per match day) from the schedule data
+const matchDays = [...new Set(matches.map(m => m[6]))];
+function buildDayFilter(containerId, handlerName) {
+  const el = document.getElementById(containerId);
+  const mk = (value, label, active) => {
+    const b = document.createElement('button');
+    b.className = 'week-btn' + (active ? ' active' : '');
+    b.textContent = label;
+    b.onclick = () => window[handlerName](value, b);
+    el.appendChild(b);
+  };
+  mk('all', 'All', true);
+  matchDays.forEach(d => mk(d, d, false));
+}
+buildDayFilter('schedule-filter', 'filterSchedule');
+buildDayFilter('slots-filter', 'filterSlots');
+buildDayFilter('assign-filter', 'filterAssign');
 
 renderSchedule('all');
 renderSlots('all');
