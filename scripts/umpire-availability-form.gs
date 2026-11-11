@@ -11,7 +11,13 @@
  *      and the responses spreadsheet link.
  *
  * Run it once — each run creates a new form.
+ *
+ * For a later weekend: change FORM_DAYS and FORM_LABEL below, then run it again.
  */
+
+// ── Which match days this form asks about ──
+const FORM_DAYS  = ['Sat, Nov 14', 'Sun, Nov 15'];
+const FORM_LABEL = 'Week 1 (Nov 14–15)';
 
 const UMPIRES = [
   'Saad (BD Power)', 'Joyel (BD Power)',
@@ -36,6 +42,7 @@ const SAT_SLOTS = ['7:00–8:00 PM', '8:00–9:00 PM', '9:00–10:00 PM', '10:00
 const SUN_SLOTS = ['4:00–5:00 PM', '5:00–6:00 PM'];
 
 // Every match day and its time slots, matching the dashboard schedule (30 slots).
+// Only the days listed in FORM_DAYS are included in the form.
 const MATCH_DAYS = [
   { day: 'Sat, Nov 14', slots: SAT_SLOTS },
   { day: 'Sun, Nov 15', slots: SUN_SLOTS },
@@ -51,19 +58,24 @@ const MATCH_DAYS = [
 const NOT_AVAILABLE = 'Not available this day';
 
 function createUmpireAvailabilityForm() {
-  const title = 'Cricket NL Fall Indoor League 2026 – Umpire Availability';
+  const days = MATCH_DAYS.filter(function (d) { return FORM_DAYS.indexOf(d.day) !== -1; });
+  if (days.length !== FORM_DAYS.length) {
+    throw new Error('Unknown day in FORM_DAYS. Use the exact labels from MATCH_DAYS, e.g. "Sat, Nov 14".');
+  }
+
+  const title = 'Cricket NL Fall Indoor League 2026 – Umpire Availability – ' + FORM_LABEL;
   const form = FormApp.create(title);
 
   form.setDescription(
-    'PowerPlex, 90 Crosbie Rd, St. John\'s · Nov 14 – Dec 19, 2026\n\n' +
-    'Please tick every time slot you are available to umpire. ' +
+    'PowerPlex, 90 Crosbie Rd, St. John\'s · ' + FORM_LABEL + '\n\n' +
+    'Please tick every time slot you are available to umpire on ' + FORM_DAYS.join(' and ') + '. ' +
     'You will never be assigned to your own team\'s matches, so you can tick slots ' +
     'even when your team is playing that day.\n\n' +
     'You can edit your response later if your availability changes.'
   );
   form.setAllowResponseEdits(true);
   form.setCollectEmail(false);
-  form.setConfirmationMessage('Thanks! Your availability has been recorded. Assignments will be shared once all responses are in.');
+  form.setConfirmationMessage('Thanks! Your availability for ' + FORM_LABEL + ' has been recorded. Assignments will be shared once all responses are in.');
 
   // ── About you ──
   form.addListItem()
@@ -80,7 +92,7 @@ function createUmpireAvailabilityForm() {
     .setTitle('Availability')
     .setHelpText('For each match day, tick every slot you can umpire, or "' + NOT_AVAILABLE + '".');
 
-  MATCH_DAYS.forEach(function (d) {
+  days.forEach(function (d) {
     form.addCheckboxItem()
       .setTitle(d.day)
       .setChoiceValues(d.slots.concat([NOT_AVAILABLE]))
