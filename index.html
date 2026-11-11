@@ -488,6 +488,7 @@
   }
   .level-tag.senior { background: var(--success-bg); color: var(--success); }
   .level-tag.intermediate { background: var(--accent-light); color: var(--accent); }
+  .level-tag.developing { background: var(--court2-bg); color: var(--court2); }
   .level-tag.new { background: var(--warning-bg); color: var(--warning); }
   .level-rules {
     background: var(--surface);
@@ -507,7 +508,8 @@
     margin-bottom: 0.75rem;
     font-size: 0.78rem;
   }
-  .next-step { font-size: 0.75rem; color: var(--fg-muted); white-space: nowrap; }
+  .levels-table thead th, .levels-table tbody td { padding-left: 0.45rem; padding-right: 0.45rem; }
+  .next-step { font-size: 0.75rem; color: var(--fg-muted); min-width: 7.5rem; }
 
   .footer {
     text-align: center;
@@ -600,17 +602,18 @@
 
 <h2 class="section-title">Umpire Levels</h2>
 <div class="level-rules">
-  Levels use certification first, then total matches umpired (summer league + duties done in this league):
+  Levels use certification first, then total matches umpired across Summer 2026, Fall 2025, Winter 2026 and duties done in this league:
   <ul>
     <li><span class="level-tag senior">Senior</span> Certified and 10+ matches</li>
-    <li><span class="level-tag intermediate">Intermediate</span> Certified with under 10 matches, or not certified with 10+</li>
-    <li><span class="level-tag new">New</span> Not certified and under 10 matches &mdash; includes newcomers with no past stats</li>
+    <li><span class="level-tag intermediate">Intermediate</span> Certified with under 10 matches (including 0), or not certified with 10+</li>
+    <li><span class="level-tag developing">Developing</span> Not certified, 1&ndash;9 matches</li>
+    <li><span class="level-tag new">New</span> Not certified, never umpired</li>
   </ul>
 </div>
 <div class="level-summary" id="level-summary"></div>
 <div style="overflow-x:auto">
-<table class="data-table">
-  <thead><tr><th>Umpire</th><th>Team</th><th>Certified</th><th style="text-align:center">Past</th><th style="text-align:center">This League</th><th style="text-align:center">Total</th><th>Level</th><th>Next Level</th></tr></thead>
+<table class="data-table levels-table">
+  <thead><tr><th>Umpire</th><th>Team</th><th>Certified</th><th style="text-align:center">Summer '26</th><th style="text-align:center">Fall '25</th><th style="text-align:center">Winter '26</th><th style="text-align:center">This League</th><th style="text-align:center">Total</th><th>Level</th><th>Next Level</th></tr></thead>
   <tbody id="levels-body"></tbody>
 </table>
 </div>
@@ -725,72 +728,77 @@ const matches = [
 ];
 
 // ── Umpire levels ──
-// past   = matches umpired in previous leagues (Summer 2026 sheet)
+// summer26 / fall25 / winter26 = matches umpired in previous leagues
+//   (Summer 2026 counts T20 + F40; certification also comes from the Summer 2026 sheet)
 // duties = umpiring duties done in THIS league — increase after each match day
 const umpires = [
-  { name: "Saad",               team: "BD Power",                   certified: false, past: 0,  duties: 0 },
-  { name: "Joyel",              team: "BD Power",                   certified: false, past: 0,  duties: 0 },
-  { name: "Aman",               team: "NL Wolves",                  certified: false, past: 0,  duties: 0 },
-  { name: "Aryan",              team: "NL Wolves",                  certified: false, past: 0,  duties: 0 },
-  { name: "Irtiza Dar",         team: "NL Stars",                   certified: false, past: 1,  duties: 0 },
-  { name: "Vraj",               team: "NSK",                        certified: true,  past: 6,  duties: 0 },
-  { name: "Mothee",             team: "Renegades",                  certified: false, past: 29, duties: 0 },
-  { name: "Samba",              team: "Renegades",                  certified: true,  past: 9,  duties: 0 },
-  { name: "Rohit",              team: "Indian Strikers",            certified: false, past: 0,  duties: 0 },
-  { name: "Abhinandan",         team: "Indian Strikers",            certified: false, past: 1,  duties: 0 },
-  { name: "Sintesh Anto",       team: "Golden Maples Malayalee CC", certified: false, past: 0,  duties: 0 },
-  { name: "Blesson",            team: "Golden Maples Malayalee CC", certified: false, past: 0,  duties: 0 },
-  { name: "Madusanka Bandara",  team: "NL Lions",                   certified: false, past: 3,  duties: 0 },
-  { name: "Gimhana Liyanage",   team: "NL Lions",                   certified: false, past: 0,  duties: 0 },
-  { name: "Mandy",              team: "NL Hunters",                 certified: false, past: 0,  duties: 0 },
-  { name: "Abubakar",           team: "Gladiators",                 certified: false, past: 0,  duties: 0 },
-  { name: "Mohad",              team: "Gladiators",                 certified: false, past: 0,  duties: 0 },
-  { name: "Midhun Krishnan",    team: "Kerala CC",                  certified: false, past: 0,  duties: 0 },
-  { name: "Jobin Joseph",       team: "Kerala CC",                  certified: false, past: 1,  duties: 0 },
-  { name: "Arnab",              team: "NL Hurricanes",              certified: false, past: 0,  duties: 0 },
-  { name: "Zidan",              team: "NL Hurricanes",              certified: false, past: 0,  duties: 0 },
-  { name: "Bikramjeet Singh",   team: "Panjab Warriors",            certified: false, past: 0,  duties: 0 },
-  { name: "Arsh Gill",          team: "Panjab Warriors",            certified: false, past: 0,  duties: 0 },
-  { name: "Efaz",               team: "NL Cobras",                  certified: false, past: 0,  duties: 0 },
-  { name: "Simoon",             team: "NL Cobras",                  certified: false, past: 0,  duties: 0 },
-  { name: "Rafid",              team: "NL Cobras",                  certified: false, past: 3,  duties: 0 },
-  { name: "Wajid",              team: "NL Eagles",                  certified: false, past: 15, duties: 0 },
-  { name: "Nidal",              team: "NL Eagles",                  certified: false, past: 0,  duties: 0 },
+  { name: "Saad",              team: "BD Power",                   certified: false, summer26:  0, fall25:  0, winter26:  2, duties: 0 },
+  { name: "Joyel",             team: "BD Power",                   certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Aman",              team: "NL Wolves",                  certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Aryan",             team: "NL Wolves",                  certified: false, summer26:  0, fall25:  2, winter26:  0, duties: 0 },
+  { name: "Irtiza Dar",        team: "NL Stars",                   certified: false, summer26:  1, fall25:  2, winter26:  1, duties: 0 },
+  { name: "Vraj",              team: "NSK",                        certified: true, summer26:  6, fall25:  9, winter26:  2, duties: 0 },
+  { name: "Mothee",            team: "Renegades",                  certified: false, summer26: 29, fall25:  4, winter26: 12, duties: 0 },
+  { name: "Samba",             team: "Renegades",                  certified: true, summer26:  9, fall25:  3, winter26: 15, duties: 0 },
+  { name: "Rohit",             team: "Indian Strikers",            certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Abhinandan",        team: "Indian Strikers",            certified: false, summer26:  1, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Sintesh Anto",      team: "Golden Maples Malayalee CC", certified: false, summer26:  0, fall25:  0, winter26:  1, duties: 0 },
+  { name: "Blesson",           team: "Golden Maples Malayalee CC", certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Madusanka Bandara", team: "NL Lions",                   certified: false, summer26:  3, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Gimhana Liyanage",  team: "NL Lions",                   certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Mandy",             team: "NL Hunters",                 certified: false, summer26:  6, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Abubakar",          team: "Gladiators",                 certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Mohad",             team: "Gladiators",                 certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Midhun Krishnan",   team: "Kerala CC",                  certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Jobin Joseph",      team: "Kerala CC",                  certified: false, summer26:  1, fall25:  0, winter26:  1, duties: 0 },
+  { name: "Arnab",             team: "NL Hurricanes",              certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Zidan",             team: "NL Hurricanes",              certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Bikramjeet Singh",  team: "Panjab Warriors",            certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Arsh Gill",         team: "Panjab Warriors",            certified: false, summer26:  0, fall25:  1, winter26:  0, duties: 0 },
+  { name: "Efaz",              team: "NL Cobras",                  certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
+  { name: "Simoon",            team: "NL Cobras",                  certified: false, summer26:  0, fall25:  3, winter26:  1, duties: 0 },
+  { name: "Rafid",             team: "NL Cobras",                  certified: false, summer26:  3, fall25:  3, winter26:  3, duties: 0 },
+  { name: "Wajid",             team: "NL Eagles",                  certified: false, summer26: 15, fall25: 14, winter26: 17, duties: 0 },
+  { name: "Nidal",             team: "NL Eagles",                  certified: false, summer26:  0, fall25:  0, winter26:  0, duties: 0 },
 ];
 
 const LEVEL_THRESHOLD = 10;
-const LEVEL_ORDER = { Senior: 0, Intermediate: 1, New: 2 };
+const LEVEL_ORDER = { Senior: 0, Intermediate: 1, Developing: 2, New: 3 };
+
+const umpireTotal = u => u.summer26 + u.fall25 + u.winter26 + u.duties;
 
 function umpireLevel(u) {
-  const total = u.past + u.duties;
+  const total = umpireTotal(u);
   if (u.certified) return total >= LEVEL_THRESHOLD ? 'Senior' : 'Intermediate';
-  return total >= LEVEL_THRESHOLD ? 'Intermediate' : 'New';
+  if (total >= LEVEL_THRESHOLD) return 'Intermediate';
+  return total > 0 ? 'Developing' : 'New';
 }
 
 function nextLevelText(u, level) {
-  const left = LEVEL_THRESHOLD - (u.past + u.duties);
+  const left = LEVEL_THRESHOLD - umpireTotal(u);
   const duties = n => `${n} more dut${n === 1 ? 'y' : 'ies'}`;
   if (level === 'Senior') return 'Top level';
   if (level === 'Intermediate') return u.certified ? `${duties(left)} &rarr; Senior` : 'Needs certification for Senior';
-  return `${duties(left)} &rarr; Intermediate`;
+  if (level === 'Developing') return `${duties(left)} &rarr; Intermediate`;
+  return '1 duty &rarr; Developing';
 }
 
 function renderLevels() {
   const rows = umpires
-    .map(u => ({ ...u, total: u.past + u.duties, level: umpireLevel(u) }))
+    .map(u => ({ ...u, total: umpireTotal(u), level: umpireLevel(u) }))
     .sort((a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level] || b.total - a.total || a.name.localeCompare(b.name));
 
-  const counts = { Senior: 0, Intermediate: 0, New: 0 };
+  const counts = { Senior: 0, Intermediate: 0, Developing: 0, New: 0 };
   rows.forEach(r => counts[r.level]++);
   document.getElementById('level-summary').innerHTML = Object.entries(counts)
     .map(([lvl, n]) => `<span class="level-tag ${lvl.toLowerCase()}">${lvl}: ${n}</span>`).join('');
 
+  const num = n => `<td style="text-align:center${n ? '' : ';color:var(--fg-muted)'}">${n}</td>`;
   document.getElementById('levels-body').innerHTML = rows.map(r => `<tr>
     <td style="font-weight:600">${r.name}</td>
     <td>${r.team}</td>
     <td>${r.certified ? 'Yes' : 'No'}</td>
-    <td style="text-align:center">${r.past}</td>
-    <td style="text-align:center">${r.duties}</td>
+    ${num(r.summer26)}${num(r.fall25)}${num(r.winter26)}${num(r.duties)}
     <td style="text-align:center;font-weight:700">${r.total}</td>
     <td><span class="level-tag ${r.level.toLowerCase()}">${r.level}</span></td>
     <td class="next-step">${nextLevelText(r, r.level)}</td>
