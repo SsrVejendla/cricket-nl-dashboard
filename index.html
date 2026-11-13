@@ -687,7 +687,7 @@ function renderSchedule(filter) {
   const tbody = document.querySelector('#schedule-table tbody');
   tbody.innerHTML = '';
   matches.forEach(m => {
-    if (filter !== 'all' && m[6] !== filter) return;
+    if (m[6] !== filter) return;
     const courtClass = m[8] === 'Court 1' ? 'c1' : 'c2';
     const isPlayoff = m[3] === 'Playoffs';
     const groupHtml = isPlayoff ? '<span class="group-tag" style="background:var(--warning-bg);color:var(--warning)">PO</span>' : `<span class="group-tag">${m[3].replace('Group ','')}</span>`;
@@ -715,7 +715,7 @@ function renderSlots(filter) {
   });
 
   Object.values(grouped).forEach(slot => {
-    if (filter !== 'all' && slot.date !== filter) return;
+    if (slot.date !== filter) return;
     const card = document.createElement('div');
     card.className = 'slot-card';
 
@@ -770,7 +770,7 @@ function renderAssignPreview(filter) {
   const days = {};
   matches.forEach(m => {
     const day = m[6];
-    if (filter !== 'all' && day !== filter) return;
+    if (day !== filter) return;
     if (!days[day]) days[day] = { slots: {}, count: 0 };
     const d = days[day];
     if (!d.slots[m[7]]) d.slots[m[7]] = { time: m[7], matches: [] };
@@ -814,27 +814,36 @@ function filterAssign(day, btn) {
   renderAssignPreview(day);
 }
 
-// Build day filter buttons (All + one per match day) from the schedule data
+// Build one filter button per match day from the schedule data
+const LEAGUE_YEAR = 2026;
 const matchDays = [...new Set(matches.map(m => m[6]))];
+
+// Open on the next match day (today if it is a match day); after the last day, show the last day
+function defaultMatchDay() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const upcoming = matchDays.find(d => new Date(`${d.split(', ')[1]} ${LEAGUE_YEAR}`) >= today);
+  return upcoming || matchDays[matchDays.length - 1];
+}
+const startDay = defaultMatchDay();
+
 function buildDayFilter(containerId, handlerName) {
   const el = document.getElementById(containerId);
-  const mk = (value, label, active) => {
+  matchDays.forEach(d => {
     const b = document.createElement('button');
-    b.className = 'week-btn' + (active ? ' active' : '');
-    b.textContent = label;
-    b.onclick = () => window[handlerName](value, b);
+    b.className = 'week-btn' + (d === startDay ? ' active' : '');
+    b.textContent = d;
+    b.onclick = () => window[handlerName](d, b);
     el.appendChild(b);
-  };
-  mk('all', 'All', true);
-  matchDays.forEach(d => mk(d, d, false));
+  });
 }
 buildDayFilter('schedule-filter', 'filterSchedule');
 buildDayFilter('slots-filter', 'filterSlots');
 buildDayFilter('assign-filter', 'filterAssign');
 
-renderSchedule('all');
-renderSlots('all');
-renderAssignPreview('all');
+renderSchedule(startDay);
+renderSlots(startDay);
+renderAssignPreview(startDay);
 
 try {
   const saved = localStorage.getItem('cnl-tab');
