@@ -592,8 +592,8 @@
 <div id="tab-assignments" class="tab-panel">
 
 <div class="pending-notice">
-  <h3>Umpire assignments pending</h3>
-  <p>Assignments will appear here once availability is collected and duties are randomized.</p>
+  <h3>Week 1 umpires assigned</h3>
+  <p>Umpires for Nov 14&ndash;15 are set below. Later weeks will appear once availability is collected.</p>
   <ul class="step-list">
     <li class="done"><span class="step-num">1</span> Collect umpire names</li>
     <li><span class="step-num">2</span> Collect availability</li>
@@ -740,6 +740,28 @@ function filterSlots(day, btn) {
   renderSlots(day);
 }
 
+// Umpire assignments by match number: [Umpire 1, Umpire 2]. Leave a name out (or '') for TBD.
+const assignments = {
+  // Week 1 — Sat, Nov 14
+  1:  ['Abhinandan', 'Rohit Dandyan'],
+  2:  ['Joel', 'Hannan'],
+  3:  ['Joel', 'Hannan'],
+  4:  ['Wajid', 'Gimhana'],
+  5:  ['Mothee', 'Samba'],
+  6:  ['Abhinandan', 'Rohit Dandyan'],
+  7:  ['Aman', 'Aryan'],
+  8:  ['Wajid', ''],
+  // Week 1 — Sun, Nov 15
+  9:  ['Mothee', 'Samba'],
+  10: ['Sintesh', 'Wajid'],
+  11: ['Mothee', 'Samba'],
+  12: ['Abhinandan', 'Rohit Dandyan'],
+};
+
+function umpireCell(name) {
+  return name ? `<td style="font-weight:600">${name}</td>` : '<td style="color:var(--fg-muted)">TBD</td>';
+}
+
 function renderAssignPreview(filter) {
   const container = document.getElementById('assign-container');
   container.innerHTML = '';
@@ -766,7 +788,8 @@ function renderAssignPreview(filter) {
       rows += `<tr class="slot-row"><td colspan="6">${slot.time}</td></tr>`;
       slot.matches.forEach(m => {
         const courtClass = m[8] === 'Court 1' ? 'c1' : 'c2';
-        rows += `<tr class="match-row"><td>${m[0]}</td><td><span class="court-tag ${courtClass}">${m[8]}</span></td><td style="font-weight:600">${m[4]}</td><td style="font-weight:600">${m[5]}</td><td style="color:var(--fg-muted)">TBD</td><td style="color:var(--fg-muted)">TBD</td></tr>`;
+        const [u1, u2] = assignments[m[0]] || [];
+        rows += `<tr class="match-row"><td>${m[0]}</td><td><span class="court-tag ${courtClass}">${m[8]}</span></td><td style="font-weight:600">${m[4]}</td><td style="font-weight:600">${m[5]}</td>${umpireCell(u1)}${umpireCell(u2)}</tr>`;
       });
     });
 
