@@ -87,12 +87,27 @@ Possible neutral umpires if needed:
 | Nasir | No | 30 | Intermediate |
 | Waqar | No | 22 | Intermediate |
 
-## How levels will be used when randomizing
+## Rules for randomizing umpire duties
 
-1. An umpire never covers a match involving their own team, or the slot right before or after it.
-2. Umpires are only placed in slots they are available for.
-3. Every match has at least one Senior or Intermediate umpire — never two New umpires together.
-4. The semi-finals and the Final get Senior umpires first.
-5. Duties are spread evenly so nobody is overloaded (especially one-umpire teams).
-6. Among equally suitable umpires, the pick is random.
-7. Any slot that cannot meet these rules is flagged for the organizer instead of being filled anyway.
+### Hard rules (never broken)
+
+1. **Not their own team.** An umpire never covers a match their own team is playing in.
+2. **Not right after their own match.** An umpire is never placed in the time slot straight
+   after their team's match on the same day, even if they marked themselves available for it.
+   If their match runs late, the next match would be delayed too.
+   - Example: Samba (Renegades). If Renegades play 8:00–9:00 PM, Samba cannot umpire
+     9:00–10:00 PM. He can umpire 10:00–11:00 PM or later.
+3. **Only when available.** Umpires are only placed in slots they said they are available for.
+4. **One match at a time.** An umpire is never on both courts in the same time slot.
+
+### Preferences (followed whenever possible)
+
+5. Avoid the slot right **before** an umpire's own match, so they have time to get ready.
+6. Every match has at least one Senior or Intermediate umpire — never two New umpires together.
+7. The semi-finals and the Final get Senior umpires first.
+8. Duties are spread evenly so nobody is overloaded (especially one-umpire teams).
+9. Among equally suitable umpires, the pick is random.
+
+If a match cannot be filled without breaking a hard rule, it is left open and flagged for
+the organizer. If only a preference has to give, the match is filled and the organizer is told
+which preference was relaxed.
