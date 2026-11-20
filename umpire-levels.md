@@ -43,10 +43,10 @@ Certification is checked first, then total matches umpired
 | Abhinandan | Indian Strikers | No | 1 | 0 | 0 | 0 | 1 | Developing |
 | Arsh Gill | Panjab Warriors | No | 0 | 1 | 0 | 0 | 1 | Developing |
 | Sintesh Anto | Golden Maples Malayalee CC | No | 0 | 0 | 1 | 0 | 1 | Developing |
+| Bikramjeet Singh | Panjab Warriors | No | 0 | 1 | 0 | 0 | 1 | Developing |
 | Abubakar | Gladiators | No | 0 | 0 | 0 | 0 | 0 | New |
 | Aman | NL Wolves | No | 0 | 0 | 0 | 0 | 0 | New |
 | Arnab | NL Hurricanes | No | 0 | 0 | 0 | 0 | 0 | New |
-| Bikramjeet Singh | Panjab Warriors | No | 0 | 0 | 0 | 0 | 0 | New |
 | Blesson | Golden Maples Malayalee CC | No | 0 | 0 | 0 | 0 | 0 | New |
 | Efaz | NL Cobras | No | 0 | 0 | 0 | 0 | 0 | New |
 | Gimhana Liyanage | NL Lions | No | 0 | 0 | 0 | 0 | 0 | New |
@@ -57,7 +57,7 @@ Certification is checked first, then total matches umpired
 | Rohit | Indian Strikers | No | 0 | 0 | 0 | 0 | 0 | New |
 | Zidan | NL Hurricanes | No | 0 | 0 | 0 | 0 | 0 | New |
 
-**Totals:** Senior 2 · Intermediate 2 · Developing 11 · New 13 (28 umpires). NL Markhors have not submitted umpires yet.
+**Totals:** Senior 2 · Intermediate 2 · Developing 12 · New 12 (28 umpires). NL Markhors have not submitted umpires yet.
 
 ## Name matching across sheets
 
@@ -72,7 +72,7 @@ Certification is checked first, then total matches umpired
 | Sintesh Anto | Sentish (Winter) | Same email |
 | Arsh Gill | Arsh (Fall) | Email suggests same person — unconfirmed |
 | Saad | Saad (Winter) | Name only — unconfirmed |
-| Bikramjeet Singh | — | **Not** matched to Vikram (Fall, 1 match); unconfirmed |
+| Bikramjeet Singh | Vikram (Fall) | Same email (signs as "Bikram") |
 
 ## Experienced past umpires not on this league's list
 
