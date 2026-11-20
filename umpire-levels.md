@@ -92,13 +92,14 @@ Possible neutral umpires if needed:
 ### Hard rules (never broken)
 
 1. **Not their own team.** An umpire never covers a match their own team is playing in.
-2. **Not after their own match — except the last match of the day.** Once an umpire's team
-   has played, that umpire is not placed in any later slot that day, even if they marked
-   themselves available, because a late-running match would delay the next one too.
-   **Exception:** the last time slot of the day is allowed, since nothing comes after it.
-   - Renegades play 9:00–10:00 PM → Samba **can** umpire 10:00–11:00 PM (last slot).
+2. **Not the slot right after their own match — unless it is the last slot of the day.**
+   An umpire is not placed in the time slot straight after their team's match on the same day,
+   even if they marked themselves available, because a late-running match would delay the next
+   one too. Later slots are fine. If the slot straight after is the **last slot of the day**,
+   it is allowed, since nothing comes after it.
+   - Renegades play 7:00–8:00 PM → Samba **cannot** umpire 8:00–9:00 PM, but **can** umpire 9:00–10:00 and 10:00–11:00 PM.
    - Renegades play 8:00–9:00 PM → Samba **cannot** umpire 9:00–10:00 PM, but **can** umpire 10:00–11:00 PM.
-   - Renegades play 7:00–8:00 PM → Samba **cannot** umpire 8:00–9:00 or 9:00–10:00 PM, but **can** umpire 10:00–11:00 PM.
+   - Renegades play 9:00–10:00 PM → Samba **can** umpire 10:00–11:00 PM (last slot).
    - Last slot by day: Saturdays 10:00–11:00 PM (on Dec 19 that is the Final); Sundays 5:00–6:00 PM.
      On Sundays there are only two slots, so this rule never blocks anyone there.
 3. **Only when available.** Umpires are only placed in slots they said they are available for.
