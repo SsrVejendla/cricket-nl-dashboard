@@ -43,10 +43,10 @@ Certification is checked first, then total matches umpired
 | Abhinandan | Indian Strikers | No | 1 | 0 | 0 | 0 | 1 | Developing |
 | Arsh Gill | Panjab Warriors | No | 0 | 1 | 0 | 0 | 1 | Developing |
 | Sintesh Anto | Golden Maples Malayalee CC | No | 0 | 0 | 1 | 0 | 1 | Developing |
+| Bikramjeet Singh | Panjab Warriors | No | 0 | 1 | 0 | 0 | 1 | Developing |
 | Abubakar | Gladiators | No | 0 | 0 | 0 | 0 | 0 | New |
 | Aman | NL Wolves | No | 0 | 0 | 0 | 0 | 0 | New |
 | Arnab | NL Hurricanes | No | 0 | 0 | 0 | 0 | 0 | New |
-| Bikramjeet Singh | Panjab Warriors | No | 0 | 0 | 0 | 0 | 0 | New |
 | Blesson | Golden Maples Malayalee CC | No | 0 | 0 | 0 | 0 | 0 | New |
 | Efaz | NL Cobras | No | 0 | 0 | 0 | 0 | 0 | New |
 | Gimhana Liyanage | NL Lions | No | 0 | 0 | 0 | 0 | 0 | New |
@@ -57,7 +57,7 @@ Certification is checked first, then total matches umpired
 | Rohit | Indian Strikers | No | 0 | 0 | 0 | 0 | 0 | New |
 | Zidan | NL Hurricanes | No | 0 | 0 | 0 | 0 | 0 | New |
 
-**Totals:** Senior 2 · Intermediate 2 · Developing 11 · New 13 (28 umpires). NL Markhors have not submitted umpires yet.
+**Totals:** Senior 2 · Intermediate 2 · Developing 12 · New 12 (28 umpires). NL Markhors have not submitted umpires yet.
 
 ## Name matching across sheets
 
@@ -72,7 +72,7 @@ Certification is checked first, then total matches umpired
 | Sintesh Anto | Sentish (Winter) | Same email |
 | Arsh Gill | Arsh (Fall) | Email suggests same person — unconfirmed |
 | Saad | Saad (Winter) | Name only — unconfirmed |
-| Bikramjeet Singh | — | **Not** matched to Vikram (Fall, 1 match); unconfirmed |
+| Bikramjeet Singh | Vikram (Fall) | Same email (signs as "Bikram") |
 
 ## Experienced past umpires not on this league's list
 
@@ -87,12 +87,32 @@ Possible neutral umpires if needed:
 | Nasir | No | 30 | Intermediate |
 | Waqar | No | 22 | Intermediate |
 
-## How levels will be used when randomizing
+## Rules for randomizing umpire duties
 
-1. An umpire never covers a match involving their own team, or the slot right before or after it.
-2. Umpires are only placed in slots they are available for.
-3. Every match has at least one Senior or Intermediate umpire — never two New umpires together.
-4. The semi-finals and the Final get Senior umpires first.
-5. Duties are spread evenly so nobody is overloaded (especially one-umpire teams).
-6. Among equally suitable umpires, the pick is random.
-7. Any slot that cannot meet these rules is flagged for the organizer instead of being filled anyway.
+### Hard rules (never broken)
+
+1. **Not their own team.** An umpire never covers a match their own team is playing in.
+2. **Not the slot right after their own match — unless it is the last slot of the day.**
+   An umpire is not placed in the time slot straight after their team's match on the same day,
+   even if they marked themselves available, because a late-running match would delay the next
+   one too. Later slots are fine. If the slot straight after is the **last slot of the day**,
+   it is allowed, since nothing comes after it.
+   - Renegades play 7:00–8:00 PM → Samba **cannot** umpire 8:00–9:00 PM, but **can** umpire 9:00–10:00 and 10:00–11:00 PM.
+   - Renegades play 8:00–9:00 PM → Samba **cannot** umpire 9:00–10:00 PM, but **can** umpire 10:00–11:00 PM.
+   - Renegades play 9:00–10:00 PM → Samba **can** umpire 10:00–11:00 PM (last slot).
+   - Last slot by day: Saturdays 10:00–11:00 PM (on Dec 19 that is the Final); Sundays 5:00–6:00 PM.
+     On Sundays there are only two slots, so this rule never blocks anyone there.
+3. **Only when available.** Umpires are only placed in slots they said they are available for.
+4. **One match at a time.** An umpire is never on both courts in the same time slot.
+
+### Preferences (followed whenever possible)
+
+5. Avoid the slot right **before** an umpire's own match, so they have time to get ready.
+6. Every match has at least one Senior or Intermediate umpire — never two New umpires together.
+7. The semi-finals and the Final get Senior umpires first.
+8. Duties are spread evenly so nobody is overloaded (especially one-umpire teams).
+9. Among equally suitable umpires, the pick is random.
+
+If a match cannot be filled without breaking a hard rule, it is left open and flagged for
+the organizer. If only a preference has to give, the match is filled and the organizer is told
+which preference was relaxed.
